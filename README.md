@@ -9,6 +9,6 @@
   <li>1x AdaFruit Motor Control Shield</li>
   <li>3x Ultrasonic Distance Sensor.</li>
 
-<p>Our problem was only pins. Because Motor Control Shiled and Sensors pins overlap. We inclued the pin on code </p>
+<p>Our problem was only pins because Motor Control Shiled and Sensors pins overlap. We inclued the pin on code </p>
 
 <center><a href="http://hizliresim.com/og6AY7"><img src="http://i.hizliresim.com/og6AY7.jpg" /></a></center>
