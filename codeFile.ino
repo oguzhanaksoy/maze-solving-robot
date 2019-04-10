@@ -1,8 +1,8 @@
 
 #include <AFMotor.h>
  
-AF_DCMotor motor1(3, MOTOR12_64KHZ); //Left Motor
-AF_DCMotor motor2(4, MOTOR12_64KHZ); //Right Motor
+AF_DCMotor engineL(3, MOTOR12_64KHZ); //Left Motor
+AF_DCMotor engineR(4, MOTOR12_64KHZ); //Right Motor
 
 
 //Right Sensor 
@@ -20,8 +20,8 @@ const int echoPin2 =A1;
 
 
 void setup() {
- motor1.setSpeed(255); 
- motor2.setSpeed(249);
+ engineL.setSpeed(255); 
+ engineR.setSpeed(249);
     Serial.begin(9600);
   pinMode(trigPin,OUTPUT);
   pinMode(trigPin1,OUTPUT);
@@ -29,92 +29,92 @@ void setup() {
 delay(2000);
 }
 
-int sagSensor,solSensor,onSensor;
+int sensorL,sensorR,sensorF;
 void loop()
 {
  
-      sagSensor = mesafeOlc(echoPin,trigPin);
-      solSensor = mesafeOlc(echoPin1,trigPin1);
-      onSensor = mesafeOlc(echoPin2,trigPin2);
+      sensorL = calculateDistance(echoPin,trigPin);
+      sensorR = calculateDistance(echoPin1,trigPin1);
+      sensorF = calculateDistance(echoPin2,trigPin2);
   
-     if(onSensor <= 15){
-    if(sagSensor >= 15){
-      sifirla(1); 
-      sagaDon(850);
-    }else if(solSensor >= 15){
-      sifirla(0); 
-      solaDon(850);
+     if(sensorF <= 15){
+    if(sensorR >= 15){
+      clear(1); 
+      turnR(850);
+    }else if(sensorL >= 15){
+      clear(0); 
+      turnL(850);
     }else{
-      sifirla(0);
-       solaDon(1700);
+      clear(0);
+       turnL(1700);
     }
   }else{
-    ileri();
+    forward();
   }
      
 
      delay(250);
 }
 
-long microsaniyeSure, cmMesafe; // Mesafe hesabında kullanılan değişkenler
+long microSecondTime, cmDistance; // Variable for using calculate distance
 int c=0;
-long mesafeOlc(int echo,int trig){
+long calculateDistance(int echo,int trig){
  digitalWrite(trig, LOW); // Hoparlör 2ms sessiz
  delayMicroseconds(2); 
  digitalWrite(trig, HIGH); // Hoparlör 10ms sesli
  delayMicroseconds(10); 
  digitalWrite(trig, LOW); // Hoparlör sessiz
- microsaniyeSure = pulseIn(echo, HIGH); // Mikrofonu dinle, yansıma süresini microsaniyeSure değişkenine al
- cmMesafe = microsaniyeSure/58.2; // microsaniyeSure'dan cm olarak mesafeyi hesapla
-return cmMesafe;
+ microSecondTime = pulseIn(echo, HIGH); // Mikrofonu dinle, yansıma süresini microSecondTime değişkenine al
+ cmDistance = microSecondTime/58.2; // microSecondTime'dan cm olarak mesafeyi hesapla
+return cmDistance;
 }
 
-void sol(bool yon)
+void left(bool direction)
 {
-  if(yon)
-    motor1.run(FORWARD);
+  if(direction)
+    engineL.run(FORWARD);
   else
-    motor1.run(BACKWARD);
+    engineL.run(BACKWARD);
 
 }
 
-void sifirla(int saniye)
+void clear(int second)
 {
-motor1.run(RELEASE);
-motor2.run(RELEASE);
-delay(saniye);
+	engineL.run(RELEASE);
+	engineR.run(RELEASE);
+	delay(second);
 }
 
-void sag(bool yon)
+void right(bool direction)
 {
-  if(yon)
-    motor2.run(FORWARD);
+  if(direction)
+    engineR.run(FORWARD);
   else
-    motor2.run(BACKWARD);
+    engineR.run(BACKWARD);
 
 }
 
-void ileri()
+void forward()
 {
-    motor1.run(BACKWARD);
-    motor2.run(BACKWARD);
+    engineL.run(BACKWARD);
+    engineR.run(BACKWARD);
     
 }
 
  
-void solaDon(int saniye){
-  sag(true);
-  sol(false);
-     delay(saniye);
-     sifirla(100);
+void turnL(int second){
+  right(true);
+  left(false);
+     delay(second);
+     clear(100);
 }
 
-void sagaDon(int saniye)
+void turnR(int second)
 {
-  sol(true);
-  sag(false);
-  delay(saniye);
-  sifirla(100);
+  left(true);
+  right(false);
+  delay(second);
+  clear(100);
 }
 
 
