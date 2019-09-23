@@ -59,13 +59,13 @@ void loop()
 long microSecondTime, cmDistance; // Variable for using calculate distance
 int c=0;
 long calculateDistance(int echo,int trig){
- digitalWrite(trig, LOW); // Hoparlör 2ms sessiz
+ digitalWrite(trig, LOW); // 2ms send 5v the Ultra Sonic Sensor
  delayMicroseconds(2); 
- digitalWrite(trig, HIGH); // Hoparlör 10ms sesli
+ digitalWrite(trig, HIGH); // 10ms send 0V(ground) the Ultra Sonic Sensor
  delayMicroseconds(10); 
- digitalWrite(trig, LOW); // Hoparlör sessiz
- microSecondTime = pulseIn(echo, HIGH); // Mikrofonu dinle, yansıma süresini microSecondTime değişkenine al
- cmDistance = microSecondTime/58.2; // microSecondTime'dan cm olarak mesafeyi hesapla
+ digitalWrite(trig, LOW); // send 0V(ground)
+ microSecondTime = pulseIn(echo, HIGH); // Listen the micrphone of sensor and get the echo 
+ cmDistance = microSecondTime/58.2; //Calculate the cm distance from @microSecondTime
 return cmDistance;
 }
 
